@@ -5,6 +5,7 @@ import numpy as np
 import plotly.express as px
 import math
 import uuid
+import json
 
 from dash import (
     html,
@@ -19,6 +20,8 @@ from dash import (
     ALL,
     set_props,
 )
+from dash_iconify import DashIconify
+from pathlib import Path
 
 from consts.tempohoras import tempoHoras
 
@@ -301,6 +304,96 @@ def create_example_image_graph():
     periodo_slider_value, periodo_numeric_value = create_connected_slider_and_number_input("example_image", "periodo", 0.001, 30, 2.219, 0.001, 3)
 
 
+    save_card = html.Div(
+        [
+            dmc.Modal(
+                children=[
+                    html.Div("Já existe uma análise salva com este mesmo nome. Deseja sobrescrever?", className="example-image-save-modal-text"),
+                    html.Div(
+                        [
+                            dmc.Button("Cancelar", color="gray", id="example_image_cancel_save", className="example-image-cancel-save"),
+                            dmc.Button("Confirmar", id="example_image_confirm_save"),
+                        ],
+                        className="align-center",
+                    )
+                ],
+                id="example_image_save_confirmation",
+                className="example-image-save-confirmation",
+            ),
+            html.Div("Digite o nome da análise:", className="example-image-save-label"),
+            dmc.TextInput(
+                id="example_image_save_name",
+                className="example-image-save-name",
+            ),
+            dmc.ActionIcon(
+                DashIconify(
+                    icon="ix:disk-filled",
+                    width=40,
+                    height=40,
+                ),
+                id="example_image_save_button",
+                className="example-image-save-button"
+            )
+        ],
+        className="example-image-save-card"
+    )
+
+
+    load_card = html.Div(
+        [
+            html.Div("Carregue uma análise:", className="example-image-load-label"),
+            dmc.Select(
+                id="example_image_load_name",
+                value="",
+                data=[],
+                className="example-image-load-name"
+            ),
+            dmc.ActionIcon(
+                DashIconify(
+                    icon="flowbite:upload-solid",
+                    width=40,
+                    height=40,
+                ),
+                id="example_image_load_button",
+                className="example-image-load-button"
+            )
+        ],
+        className="example-image-load-card"
+    )
+
+    spots_card = html.Div(
+        [
+            dcc.Store(id="example_spots_store", data={}),
+            html.Div(
+                "Manchas",
+                className="card-title",
+            ),
+            dbc.Row(
+                [
+                    dbc.Col(
+                        [
+                            html.Div(
+                                [
+                                    dmc.Button("Adicionar Mancha", id="example_add_spots"),
+                                    dmc.SegmentedControl(
+                                        id="example_spots_segmented_control",
+                                        value="",
+                                        data=[]
+                                    )
+                                ]
+                            )
+                        ]
+                    )
+                ]
+            ),
+            dbc.Row(
+                html.Div(children=generate_new_spot(), id="example_spots_container")
+            )
+        ],
+        className="example-image-spots-card card-container"
+    )
+
+
     stars_search = html.Div(
         [
             dcc.Store(id="example_image_retrieved_curves", data={}),
@@ -365,34 +458,6 @@ def create_example_image_graph():
                 ]
             )
         ]
-    )
-
-    spots_card = html.Div(
-        [
-            dcc.Store(id="example_spots_store", data={}),
-            dbc.Row(
-                [
-                    dbc.Col(
-                        [
-                            html.Div(
-                                [
-                                    dmc.Button("Adicionar Mancha", id="example_add_spots"),
-                                    dmc.SegmentedControl(
-                                        id="example_spots_segmented_control",
-                                        value="",
-                                        data=[]
-                                    )
-                                ]
-                            )
-                        ]
-                    )
-                ]
-            ),
-            dbc.Row(
-                html.Div(children=generate_new_spot(), id="example_spots_container")
-            )
-        ],
-        className="example-image-spots-card"
     )
 
     graph_image = dcc.Graph(
@@ -951,6 +1016,183 @@ def create_example_image_graph():
 
         return patched_figure
 
+    @dash.callback(
+        Output("example_image_save_confirmation", "opened", allow_duplicate=True),
+        Input("example_image_cancel_save", "n_clicks"),
+        prevent_initial_call=True,
+    )
+    def example_image_close_modal(nc1):
+        return False
+
+
+    @dash.callback(
+        Output("example_image_load_name", "data"),
+        Output("example_image_save_confirmation", "opened"),
+        Input("example_image_save_button", "n_clicks"),
+        Input("example_image_confirm_save", "n_clicks"),
+        State("example_image_save_name", "value"),
+        State("example_image_load_name", "data"),
+        State("example_image_u1_slider_value", "value"),
+        State("example_image_u2_slider_value", "value"),
+        State("example_image_rsun_slider_value", "value"),
+        State("example_image_angulo_inclinacao_slider_value", "value"),
+        State("example_image_semi_eixo_slider_value", "value"),
+        State("example_image_raio_planeta_slider_value", "value"),
+        State("example_image_periodo_slider_value", "value"),
+        State("example_spots_store", "data"),
+        State("example_image_star_name", "value"),
+        State("example_image_cadence", "value"),
+        State("example_image_mission", "value"),
+    )
+    def example_image_save_data(
+        nc1,
+        nc2,
+        filename,
+        load_data,
+        u1,
+        u2,
+        rsun,
+        angulo_inclinacao,
+        semi_eixo,
+        raio_planeta,
+        periodo,
+        spots,
+        star_name,
+        cadence,
+        mission,
+    ):
+        triggered_id = callback_context.triggered_id
+        folder_path = Path.cwd() / "analises"
+
+        if triggered_id is None:
+            if folder_path.exists() and folder_path.is_dir():
+                json_files = [
+                    {"label": file.stem, "value": str(file)} for file in folder_path.glob("*.json")
+                ]
+                return json_files, no_update
+            
+            return no_update
+        
+        elif triggered_id == "example_image_save_button":
+            file_path = folder_path / f"{filename}.json"
+
+            if file_path.exists():
+                return no_update, True
+
+            file_data = {
+                "estrela": {
+                    "u1": u1,
+                    "u2": u2,
+                    "rsun": rsun,
+                    "star_name": star_name,
+                    "cadence": cadence,
+                    "mission": mission
+                },
+                "manchas": spots,
+                "planeta": {
+                    "angulo_inclinacao": angulo_inclinacao,
+                    "semi_eixo": semi_eixo,
+                    "raio_planeta": raio_planeta,
+                    "periodo": periodo,
+                },
+            }
+
+            with file_path.open("w", encoding="utf-8") as f:
+                json.dump(file_data, f, indent=4, ensure_ascii=False)
+
+            load_data.append({"label": filename, "value": str(file_path)})
+
+            return load_data, no_update
+
+        file_path = folder_path / f"{filename}.json"
+
+        file_data = {
+            "estrela": {
+                "u1": u1,
+                "u2": u2,
+                "rsun": rsun,
+                "star_name": star_name,
+                "cadence": cadence,
+                "mission": mission
+            },
+            "manchas": spots,
+            "planeta": {
+                "angulo_inclinacao": angulo_inclinacao,
+                "semi_eixo": semi_eixo,
+                "raio_planeta": raio_planeta,
+                "periodo": periodo,
+            },
+        }
+
+        with file_path.open("w", encoding="utf-8") as f:
+            json.dump(file_data, f, indent=4, ensure_ascii=False)
+
+        return load_data, False
+    
+
+    @dash.callback(
+        Output("example_image_u1_slider_value", "value", allow_duplicate=True),
+        Output("example_image_u2_slider_value", "value", allow_duplicate=True),
+        Output("example_image_rsun_slider_value", "value", allow_duplicate=True),
+        Output("example_image_star_name", "value", allow_duplicate=True),
+        Output("example_image_cadence", "value", allow_duplicate=True),
+        Output("example_image_mission", "value", allow_duplicate=True),
+        Output("example_image_angulo_inclinacao_slider_value", "value", allow_duplicate=True),
+        Output("example_image_semi_eixo_slider_value", "value", allow_duplicate=True),
+        Output("example_image_raio_planeta_slider_value", "value", allow_duplicate=True),
+        Output("example_image_periodo_slider_value", "value", allow_duplicate=True),
+        Output("example_spots_store", "data", allow_duplicate=True),
+        Output("example_spots_segmented_control", "data", allow_duplicate=True),
+        Output("example_spots_segmented_control", "value", allow_duplicate=True),
+        Output("example_image_raio_slider_value", "disabled", allow_duplicate=True),
+        Output("example_image_intensidade_slider_value", "disabled", allow_duplicate=True),
+        Output("example_image_latitude_slider_value", "disabled", allow_duplicate=True),
+        Output("example_image_longitude_slider_value", "disabled", allow_duplicate=True),
+        Input("example_image_load_button", "n_clicks"),
+        State("example_image_load_name", "value"),
+        prevent_initial_call=True,
+    )
+    def example_image_load_data(
+        nc1,
+        file_path_str,
+    ):
+        file_path = Path(file_path_str)
+
+        with file_path.open("r", encoding="utf-8") as f:
+            file_data = json.load(f)
+
+        segmented_control_data = [
+            {"value": key, "label": f"Mancha {i+1}"} 
+            for i, key in enumerate(file_data["manchas"])
+        ]
+
+        if segmented_control_data:
+            segmented_control_value = segmented_control_data[0]["value"]
+        else:
+            segmented_control_value = ""
+
+        if segmented_control_data:
+            disabled = False
+        else:
+            disabled = True
+
+        return (
+            file_data["estrela"]["u1"],
+            file_data["estrela"]["u2"],
+            file_data["estrela"]["rsun"],
+            file_data["estrela"]["star_name"],
+            file_data["estrela"]["cadence"],
+            file_data["estrela"]["mission"],
+            file_data["planeta"]["angulo_inclinacao"],
+            file_data["planeta"]["semi_eixo"],
+            file_data["planeta"]["raio_planeta"],
+            file_data["planeta"]["periodo"],
+            file_data["manchas"],
+            segmented_control_data,
+            segmented_control_value,
+            *[disabled]*4
+        )
+        
 
     return html.Div(
         [
@@ -985,70 +1227,93 @@ def create_example_image_graph():
                     dbc.Col(
                         [
                             dbc.Row(
+                                load_card,
+                            ),
+                            dbc.Row(
                                 [
                                     dbc.Col(
                                         [
-                                            dbc.Row(
+                                            html.Div(
                                                 [
-                                                    html.Div(["Coef. de Escurecimento de Limbo 1"], className="variable-title"),
-                                                    u1_slider_value,
-                                                    u1_numeric_value
-                                                ]
-                                            ),
-                                            dbc.Row(
-                                                [
-                                                    html.Div(["Coef. de Escurecimento de Limbo 2"], className="variable-title"),
-                                                    u2_slider_value,
-                                                    u2_numeric_value
-                                                ]
-                                            ),
-                                            dbc.Row(
-                                                [
-                                                    html.Div(["Raio da estrela (relação ao raio do Sol)"], className="variable-title"),
-                                                    rsun_slider_value,
-                                                    rsun_numeric_value
-                                                ]
-                                            ),
+                                                    html.Div(
+                                                        "Variáveis",
+                                                        className="card-title",
+                                                    ),
+                                                    dbc.Row(
+                                                        [
+                                                            dbc.Col(
+                                                                [
+                                                                    dbc.Row(
+                                                                        [
+                                                                            html.Div(["Coef. de Escurecimento de Limbo 1"], className="variable-title"),
+                                                                            u1_slider_value,
+                                                                            u1_numeric_value
+                                                                        ]
+                                                                    ),
+                                                                    dbc.Row(
+                                                                        [
+                                                                            html.Div(["Coef. de Escurecimento de Limbo 2"], className="variable-title"),
+                                                                            u2_slider_value,
+                                                                            u2_numeric_value
+                                                                        ]
+                                                                    ),
+                                                                    dbc.Row(
+                                                                        [
+                                                                            html.Div(["Raio da estrela (relação ao raio do Sol)"], className="variable-title"),
+                                                                            rsun_slider_value,
+                                                                            rsun_numeric_value
+                                                                        ]
+                                                                    ),
+                                                                ]
+                                                            ),
+                                                            dbc.Col(
+                                                                [
+                                                                    dbc.Row(
+                                                                        [
+                                                                            html.Div(["Ângulo de Inclinação"], className="variable-title"),
+                                                                            angulo_inclinacao_slider_value,
+                                                                            angulo_inclinacao_numeric_value
+                                                                        ]
+                                                                    ),
+                                                                    dbc.Row(
+                                                                        [
+                                                                            html.Div(["Semi-Eixo (Em UA)"], className="variable-title"),
+                                                                            semi_eixo_slider_value,
+                                                                            semi_eixo_numeric_value
+                                                                        ]
+                                                                    ),
+                                                                    dbc.Row(
+                                                                        [
+                                                                            html.Div(["Raio do Planeta (Em Raios de Júpiter)"], className="variable-title"),
+                                                                            raio_planeta_slider_value,
+                                                                            raio_planeta_numeric_value
+                                                                        ]
+                                                                    ),
+                                                                    dbc.Row(
+                                                                        [
+                                                                            html.Div(["Período (Em dias)"], className="variable-title"),
+                                                                            periodo_slider_value,
+                                                                            periodo_numeric_value
+                                                                        ]
+                                                                    ),
+                                                                ]
+                                                            ),
+                                                        ]
+                                                    )
+                                                ],
+                                                className="card-container variables-container"
+                                            )
                                         ]
-                                    ),
-                                    dbc.Col(
-                                        [
-                                            dbc.Row(
-                                                [
-                                                    html.Div(["Ângulo de Inclinação"], className="variable-title"),
-                                                    angulo_inclinacao_slider_value,
-                                                    angulo_inclinacao_numeric_value
-                                                ]
-                                            ),
-                                            dbc.Row(
-                                                [
-                                                    html.Div(["Semi-Eixo (Em UA)"], className="variable-title"),
-                                                    semi_eixo_slider_value,
-                                                    semi_eixo_numeric_value
-                                                ]
-                                            ),
-                                            dbc.Row(
-                                                [
-                                                    html.Div(["Raio do Planeta (Em Raios de Júpiter)"], className="variable-title"),
-                                                    raio_planeta_slider_value,
-                                                    raio_planeta_numeric_value
-                                                ]
-                                            ),
-                                            dbc.Row(
-                                                [
-                                                    html.Div(["Período (Em dias)"], className="variable-title"),
-                                                    periodo_slider_value,
-                                                    periodo_numeric_value
-                                                ]
-                                            ),
-                                        ]
-                                    ),
+                                    )
                                 ]
                             ),
                             dbc.Row(
                                 spots_card,
                                 className="example-image-spots-card-remove-margin"
-                            )
+                            ),
+                            dbc.Row(
+                                save_card,
+                            ),
                         ],
                         width=6,
                     ),

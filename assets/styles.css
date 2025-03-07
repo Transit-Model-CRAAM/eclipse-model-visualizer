@@ -16,6 +16,24 @@
     font-weight: bold;
 }
 
+.card-container {
+    padding: 10px;
+    border: 2px solid black;
+    border-radius: 10px;
+    position: relative;
+    background: white; /* Mesma cor do fundo para o recorte */
+}
+
+.card-title {
+    position: absolute;
+    top: -15px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: white; /* Mesma cor do fundo para esconder a borda */
+    padding: 0 10px;
+    font-weight: bold;
+}
+
 /* Slider background (deselected) */
 .rc-slider-rail {
     background-color: var(--slider-inactive-color);
@@ -65,6 +83,50 @@
     padding-right: 30px;
 }
 
+/* Save and Load */
+
+.example-image-save-card,
+.example-image-load-card {
+    display: flex;
+    align-items: center;
+    padding: 10px;
+}
+
+.example-image-save-label,
+.example-image-load-label {
+    font-weight: bold;
+    padding-right: 10px;
+}
+
+.example-image-save-name,
+.example-image-load-name {
+    flex: 1;
+    flex-grow: 1;
+}
+
+/* .example-image-save-button,
+.example-image-load-button {
+    padding-bottom: 10px;
+} */
+
+.example-image-save-modal-text {
+    font-weight: bold;
+    font-size: 20px;
+    text-align: center;
+    padding-bottom: 30px;
+}
+
+.example-image-cancel-save {
+    margin-right: 20px;
+}
+
+/* Variables */
+
+.variables-container {
+    margin-top: 10px;
+    margin-bottom: 0px;
+}
+
 /* Spots */
 
 .example-image-spot-delete-button,
@@ -85,6 +147,7 @@
 
 .example-image-spots-card-remove-margin {
     margin: 0px !important;
+    margin-top: -10px !important;
 }
 
 /* List Group */
