@@ -1,0 +1,17 @@
+{
+    "estrela": {
+        "u1": 0.365,
+        "u2": 0.08,
+        "rsun": 0.87,
+        "star_name": "Kepler-468",
+        "cadence": "short",
+        "mission": "Kepler"
+    },
+    "manchas": {},
+    "planeta": {
+        "angulo_inclinacao": 90.6,
+        "semi_eixo": 0.226,
+        "raio_planeta": 1.308,
+        "periodo": 38.477
+    }
+}

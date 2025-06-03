@@ -168,7 +168,7 @@ class Modelo:
         jj = numpy.argsort(phase)
         ff = phase[jj]
 
-        smoothed_LC = scipy.ndimage.filters.uniform_filter(flux[jj], size = 100) # equivalente ao smooth do idl com edge_truncade
+        smoothed_LC = scipy.ndimage.filters.uniform_filter(flux[jj], size = 10) # equivalente ao smooth do idl com edge_truncade
         smoothed_LC[0:200] = 1
         smoothed_LC[len(flux[jj])-200:len(flux[jj])] = 1
         x = phase[jj]

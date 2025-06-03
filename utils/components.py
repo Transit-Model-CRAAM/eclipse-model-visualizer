@@ -301,7 +301,7 @@ def create_example_image_graph():
     angulo_inclinacao_slider_value, angulo_inclinacao_numeric_value = create_connected_slider_and_number_input("example_image", "angulo_inclinacao", 60, 100, 85.51, 0.01, 2)
     semi_eixo_slider_value, semi_eixo_numeric_value = create_connected_slider_and_number_input("example_image", "semi_eixo", 0.001, 2, 0.031, 0.001, 3)
     raio_planeta_slider_value, raio_planeta_numeric_value = create_connected_slider_and_number_input("example_image", "raio_planeta", 0.001, 5, 1.138, 0.001, 3)
-    periodo_slider_value, periodo_numeric_value = create_connected_slider_and_number_input("example_image", "periodo", 0.001, 30, 2.219, 0.001, 3)
+    periodo_slider_value, periodo_numeric_value = create_connected_slider_and_number_input("example_image", "periodo", 0.001, 40, 2.219, 0.001, 3)
 
 
     save_card = html.Div(
@@ -933,13 +933,16 @@ def create_example_image_graph():
                 selectedTransit = i #transito selecionado
                 time_phased, smoothed_LC = tratamento.select_transit_smooth(selectedTransit)
 
+                mediana = np.median(smoothed_LC)
+                smoothed_LC = smoothed_LC / mediana
+
                 transit_data[f"Transito {i}"] = {
                     "time_phased": time_phased,
                     "smoothed_LC": smoothed_LC
                 }
             except:
                 pass
-
+            
         patched_figure = Patch()
 
         for i in range(len(figure["data"])-1, 1, -1):
