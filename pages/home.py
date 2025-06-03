@@ -10,7 +10,7 @@ from utils.components import (
     create_example_card,
 )
 
-register_page(__name__, path="/")
+register_page(__name__, path="/image")
 
 layout = html.Div(
     [
