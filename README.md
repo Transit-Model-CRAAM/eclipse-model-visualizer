@@ -26,7 +26,7 @@ Visualizador do Eclipse
 1. Criar modelo da estrela 
 2. Criar modelo do planeta 
 3. Adicionar manchas (intensidade < 1)
-4. Adicionar flares (intensidade > 1)
+4. Adicionar fáculas (intensidade > 1)
 
 
 # 🇺🇸
@@ -38,15 +38,15 @@ Visualizador do Eclipse
 ```python app.py```
 
 2. When the file runs successfully, it will display the following output in the terminal: 
-```
-Dash is running on http://127.0.0.1:8050/
+    ```
+    Dash is running on http://127.0.0.1:8050/
 
-* Serving Flask app 'app'
-* Debug mode: on
+    * Serving Flask app 'app'
+    * Debug mode: on
 
-```
+    ```
 
-The url ```http://127.0.0.1:8050/``` indicates the local port on which the visualizer server is running.
+    The url ```http://127.0.0.1:8050/``` indicates the local port on which the visualizer server is running.
 
 3. Paste the url ```http://127.0.0.1:8050/``` into your preferred web browser
 
@@ -54,4 +54,4 @@ The url ```http://127.0.0.1:8050/``` indicates the local port on which the visua
 1. Create Star Model
 2. Create Planet Model
 3. Add Spots (Intensity < 1)
-4. Add Flares (Intensity > 1)
+4. Add Faculae (Intensity > 1)
