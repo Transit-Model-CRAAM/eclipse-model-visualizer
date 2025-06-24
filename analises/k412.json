@@ -1,0 +1,17 @@
+{
+    "estrela": {
+        "u1": 0.352,
+        "u2": 0.171,
+        "rsun": 1.29,
+        "star_name": "Kepler-412",
+        "cadence": "short",
+        "mission": "Kepler"
+    },
+    "manchas": {},
+    "planeta": {
+        "angulo_inclinacao": 80.56,
+        "semi_eixo": 0.029,
+        "raio_planeta": 1.362,
+        "periodo": 1.721
+    }
+}

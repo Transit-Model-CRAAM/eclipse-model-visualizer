@@ -1,0 +1,17 @@
+{
+    "estrela": {
+        "u1": 0.295,
+        "u2": 0.024,
+        "rsun": 0.805,
+        "star_name": "",
+        "cadence": "short",
+        "mission": ""
+    },
+    "manchas": {},
+    "planeta": {
+        "angulo_inclinacao": 85.51,
+        "semi_eixo": 0.031,
+        "raio_planeta": 1.138,
+        "periodo": 2.219
+    }
+}

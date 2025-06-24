@@ -1,0 +1,54 @@
+{
+    "estrela": {
+        "u1": 0.365,
+        "u2": 0.08,
+        "rsun": 0.87,
+        "star_name": "Kepler-468",
+        "cadence": "short",
+        "mission": "Kepler"
+    },
+    "manchas": {
+        "77606392-b072-498f-9d13-c85befbe9dc4": {
+            "raio": 0.06,
+            "intensidade": 0.5,
+            "latitude": 38.46,
+            "longitude": 44.37
+        },
+        "7849f919-c3ae-47e4-907f-d0b52c2ef477": {
+            "raio": 0.07,
+            "intensidade": 0.5,
+            "latitude": 45.5,
+            "longitude": 22.79
+        },
+        "f35a29ae-47d9-46f2-a2c3-81aed6740d90": {
+            "raio": 0.04,
+            "intensidade": 0.5,
+            "latitude": 44,
+            "longitude": 1.37
+        },
+        "639254ae-8875-4572-b030-4ba13d055a86": {
+            "raio": 0.07,
+            "intensidade": 0.5,
+            "latitude": 44,
+            "longitude": -13.49
+        },
+        "02e13bd5-dd46-41dd-ac99-e65a24fdb13f": {
+            "raio": 0.07,
+            "intensidade": 0.5,
+            "latitude": 43,
+            "longitude": -30.81
+        },
+        "1fed6e23-8a34-4f2a-b7da-c2940ea03a6f": {
+            "raio": 0.1,
+            "intensidade": 0.5,
+            "latitude": 39.21,
+            "longitude": -55.69
+        }
+    },
+    "planeta": {
+        "angulo_inclinacao": 90.6,
+        "semi_eixo": 0.226,
+        "raio_planeta": 1.308,
+        "periodo": 38.477
+    }
+}

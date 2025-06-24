@@ -1,0 +1,166 @@
+:root {
+    --slider-inactive-color: #e9e9e9;
+    --slider-active-color: #abe2fb;
+    --slider-center-dot-color: #fff;
+}
+
+/* General */
+
+.align-center {
+    display: flex;
+    justify-content: center;
+}
+
+.variable-title {
+    text-align: center;
+    font-weight: bold;
+}
+
+.card-container {
+    padding: 10px;
+    border: 2px solid black;
+    border-radius: 10px;
+    position: relative;
+    background: white; /* Mesma cor do fundo para o recorte */
+}
+
+.card-title {
+    position: absolute;
+    top: -15px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: white; /* Mesma cor do fundo para esconder a borda */
+    padding: 0 10px;
+    font-weight: bold;
+}
+
+/* Slider background (deselected) */
+.rc-slider-rail {
+    background-color: var(--slider-inactive-color);
+}
+
+/* Slider background (selected) */
+.rc-slider-track {
+    background-color: var(--slider-active-color);
+}
+
+.rc-slider-handle:hover {
+    border: solid 2px var(--slider-active-color);
+    background-color: var(--slider-center-dot-color);
+}
+
+/* Slider inactive side dot */
+.rc-slider-dot {
+    border: solid 2px var(--slider-inactive-color);
+    background-color: var(--slider-center-dot-color);
+}
+
+/* Slider central dot + Active side dot */
+.rc-slider-handle,
+.rc-slider-dot-active {
+    border: solid 2px var(--slider-active-color);
+    background-color: var(--slider-center-dot-color);
+}
+
+/* Page */
+
+.example-image-container {
+    width: 99vw;
+}
+
+/* Graphs */
+
+.example-image-graph-lightcurve {
+    width: 500px;
+}
+
+.example-image-x-axis-slider-value {
+    width: 410px;
+}
+
+.example-image-x-axis-slider-container,
+.example-image-graph-lightcurve-container {
+    padding-right: 30px;
+}
+
+/* Save and Load */
+
+.example-image-save-card,
+.example-image-load-card {
+    display: flex;
+    align-items: center;
+    padding: 10px;
+}
+
+.example-image-save-label,
+.example-image-load-label {
+    font-weight: bold;
+    padding-right: 10px;
+}
+
+.example-image-save-name,
+.example-image-load-name {
+    flex: 1;
+    flex-grow: 1;
+}
+
+/* .example-image-save-button,
+.example-image-load-button {
+    padding-bottom: 10px;
+} */
+
+.example-image-save-modal-text {
+    font-weight: bold;
+    font-size: 20px;
+    text-align: center;
+    padding-bottom: 30px;
+}
+
+.example-image-cancel-save {
+    margin-right: 20px;
+}
+
+/* Variables */
+
+.variables-container {
+    margin-top: 10px;
+    margin-bottom: 0px;
+}
+
+/* Spots */
+
+.example-image-spot-delete-button,
+.example-image-find-curves-button {
+    padding-top: 10px;
+}
+
+.example-image-spot-container {
+    margin: 20px;
+}
+
+.example-image-spots-card {
+    border: 2px solid black;
+    border-radius: 10px;
+    margin-top: 40px;
+    padding-top: 10px;
+}
+
+.example-image-spots-card-remove-margin {
+    margin: 0px !important;
+    margin-top: -10px !important;
+}
+
+/* List Group */
+
+.example-image-curves-list-group {
+    height: 600px;
+    width: 90%;
+    margin-top: 10px;
+    border: 2px solid black;
+    overflow: overlay;
+    -ms-overflow-style: overlay;
+}
+
+.example-image-retrieved-curve-item:hover {
+    cursor: pointer;
+}
