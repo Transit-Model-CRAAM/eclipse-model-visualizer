@@ -27,6 +27,7 @@ Visualizador do Eclipse
 2. Criar modelo do planeta 
 3. Adicionar manchas (intensidade < 1)
 4. Adicionar fáculas (intensidade > 1)
+5. Adicionar e visualizar curvas de luz baixadas da lib ligtkurve (missões KEPLER, K2 e TESS) para comparação com o modelo
 
 
 # 🇺🇸
@@ -55,3 +56,4 @@ Visualizador do Eclipse
 2. Create Planet Model
 3. Add Spots (Intensity < 1)
 4. Add Faculae (Intensity > 1)
+5. Add and visualize light curves downloaded from ligtkurve lib (KEPLER, K2 and TESS missions) to compare with the model
