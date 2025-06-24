@@ -1,0 +1,30 @@
+{
+    "estrela": {
+        "u1": 0.474,
+        "u2": 0.08,
+        "rsun": 1.397,
+        "star_name": "HD189733A",
+        "cadence": "short",
+        "mission": ""
+    },
+    "manchas": {
+        "8e03290a-f83b-4ee4-a90a-9f3397e8f2b7": {
+            "raio": 0.12,
+            "intensidade": 0.37,
+            "latitude": -29.6,
+            "longitude": -11
+        },
+        "5c945025-6151-426f-ab7a-c033f36e53dd": {
+            "raio": 0.05,
+            "intensidade": 0.5,
+            "latitude": -39.4,
+            "longitude": 40
+        }
+    },
+    "planeta": {
+        "angulo_inclinacao": 88.87,
+        "semi_eixo": 0.211,
+        "raio_planeta": 1.418,
+        "periodo": 3.214
+    }
+}
